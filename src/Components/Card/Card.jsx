@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "./Card.css";
 import Button from "../Button/Button";
+import "./Card.css";
 function Card({ food, onAdd, onRemove }) {
   const [count, setCount] = useState(0);
   const { title, Image, price, id } = food;

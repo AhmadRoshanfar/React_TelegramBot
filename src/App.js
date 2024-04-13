@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import "./App.css";
 import Card from "./Components/Card/Card";
 import Cart from "./Components/Cart/Cart";
@@ -7,13 +7,18 @@ const foods = getData();
 
 const telegram = window.Telegram.WebApp;
 
-function logMe() {
-  telegram.sendData("Hellooooo");
+function logMe(message) {
+  var sendMessage = `
+پیام شما: ${message}
+  `;
+  telegram.sendData(sendMessage);
+
   // telegram.close();
 }
-function App() {
-  const [cartItems, setCartItems] = useState([]);
 
+function App() {
+  const inputRef = useRef();
+  const [cartItems, setCartItems] = useState([]);
   useEffect(() => {
     telegram.ready();
     let main_page = document.querySelector("#main_page");
@@ -51,7 +56,7 @@ function App() {
   const onCheckout = () => {
     telegram.MainButton.text = "Pay :)";
     telegram.MainButton.show();
-    telegram.MainButton.onClick(logMe);
+    telegram.MainButton.onClick(logMe(inputRef.current.value));
   };
 
   return (
@@ -64,6 +69,22 @@ function App() {
             <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove} />
           );
         })}
+      </div>
+      <div>
+        <h1>Checkout</h1>
+        <input type="text" name="" id="" ref={inputRef} />
+        <div className="btn-container">
+          <button
+            style={{
+              width: "100px", // Set desired width
+              height: "50px", // Set desired height
+              fontSize: "16px", // Adjust font size if needed
+            }}
+            onClick={() => console.log(inputRef.current.value)}
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </>
   );
